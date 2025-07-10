@@ -20,8 +20,14 @@ app.secret_key = "your-super-secret-key"
 
 db.init_app(app)
 
-def generate_short_id(num_chars=6):
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=num_chars))
+def generate_short_id(user_id, num_chars=6):
+    while True:
+        short_id = ''.join(random.choices(string.ascii_letters + string.digits, k=num_chars))
+        # Check if this short_id already exists for this user
+        if not Url.query.filter_by(short_id=short_id, user_id=user_id).first():
+            return short_id
+        # If it exists, try again with a longer ID
+        num_chars += 1
 
 @app.before_request
 def create_tables():
@@ -45,7 +51,7 @@ def home():
                 return "Custom alias already taken!", 400
             short_id = custom_alias
         else:
-            short_id = generate_short_id()
+            short_id = generate_short_id(user_id)
 
         new_link = Url(
             original_url=original_url,
