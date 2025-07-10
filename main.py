@@ -29,11 +29,7 @@ def generate_short_id(user_id, num_chars=6):
         # If it exists, try again with a longer ID
         num_chars += 1
 
-@app.before_request
-def create_tables():
-    if not hasattr(app, 'tables_created'):
-        db.create_all()
-        app.tables_created = True
+
 
 @app.route('/', methods=['GET', 'POST'])
 @login_required
@@ -146,4 +142,7 @@ def logout():
     return redirect('/')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=81)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, host='0.0.0.0', port=81)
+
