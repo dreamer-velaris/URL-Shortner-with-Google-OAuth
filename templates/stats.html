@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><title>Stats for {{ link.short_id }}</title></head>
+<body>
+<h2>Stats for: <code>{{ link.short_id }}</code></h2>
+<p><strong>Original URL:</strong> <a href="{{ link.original_url }}">{{ link.original_url }}</a></p>
+<p><strong>Short URL:</strong> {{ request.host_url }}{{ link.short_id }}</p>
+<p><strong>Click Count:</strong> {{ link.clicks }}</p>
+<p><strong>Created At:</strong> {{ link.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+<p><strong>Expires At:</strong>
+    {% if link.expires_at %}
+        {{ link.expires_at.strftime('%Y-%m-%d') }}
+    {% else %}
+        Never
+    {% endif %}
+</p>
+<h3>Export Stats</h3>
+<a href="/export/{{ link.short_id }}/json">Download JSON</a><br>
+<a href="/export/{{ link.short_id }}/csv">Download CSV</a><br>
+<p><a href="/">Go Back</a></p>
+</body>
+</html>
