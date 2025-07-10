@@ -13,9 +13,11 @@ db.init_app(app)
 def generate_short_id(num_chars=6):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=num_chars))
 
-@app.before_first_request
+@app.before_request
 def create_tables():
-    db.create_all()
+    if not hasattr(app, 'tables_created'):
+        db.create_all()
+        app.tables_created = True
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
