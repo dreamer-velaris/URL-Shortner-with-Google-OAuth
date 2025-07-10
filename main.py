@@ -3,6 +3,16 @@ from models import db, Url, User
 from datetime import datetime
 import string, random
 
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -20,6 +30,7 @@ def create_tables():
         app.tables_created = True
 
 @app.route('/', methods=['GET', 'POST'])
+@login_required
 def home():
     user_id = session.get('user_id')
     if request.method == 'POST':
@@ -28,7 +39,8 @@ def home():
         expiry_date = request.form.get('expiry_date')
 
         if custom_alias:
-            exists = Url.query.filter_by(short_id=custom_alias).first()
+            exists = Url.query.filter_by(short_id=custom_alias, user_id=user_id).first()
+
             if exists:
                 return "Custom alias already taken!", 400
             short_id = custom_alias
@@ -93,26 +105,34 @@ def export_stats(short_id, format):
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         if User.query.filter_by(username=username).first():
-            return "Username already exists"
-        user = User(username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
-        return redirect('/login')
-    return render_template('signup.html')
+            error = "Username already exists"
+        else:
+            user = User(username=username, password=password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect('/login')
+    return render_template('signup.html', error=error)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
         if user and user.password == request.form['password']:
             session['user_id'] = user.id
-            return redirect('/')
-        return "Invalid credentials"
-    return render_template('login.html')
+            next_page = request.args.get('next') or '/'
+            return redirect(next_page)
+        else:
+            error = "Invalid username or password"
+
+    return render_template('login.html', error=error)
+
 
 @app.route('/logout')
 def logout():
