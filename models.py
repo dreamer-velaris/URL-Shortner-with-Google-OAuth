@@ -11,7 +11,7 @@ class User(db.Model):
 class Url(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     original_url = db.Column(db.String(500), nullable=False)
-    short_id = db.Column(db.String(10), nullable=False)  # ❌ No unique=True here
+    short_id = db.Column(db.String(10), nullable=False) 
     clicks = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, nullable=False)
     expires_at = db.Column(db.DateTime, nullable=True)

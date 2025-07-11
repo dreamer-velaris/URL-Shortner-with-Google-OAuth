@@ -35,7 +35,6 @@ Users can:
 
 ## 📸 Screenshots
 
-<!-- Optional: Include screenshots of the interface here -->
 
 ---
 
@@ -45,12 +44,12 @@ Users can:
 
 If you're running this locally:
 
-```bash
+
 git clone https://github.com/dreamer-velaris/URL-Shortner-with-Google-OAuth.git
 cd URL-Shortner-with-Google-OAuth
 Or fork it on GitHub and open in Replit directly.
 
-2. Install Dependencies
+### 2. Install Dependencies
 If you're using Replit, it should auto-install based on requirements.txt.
 
 If running locally:
@@ -59,7 +58,7 @@ bash
 Copy
 Edit
 pip install -r requirements.txt
-3. Set Up the Database
+### 3. Set Up the Database
 bash
 Copy
 Edit
@@ -72,7 +71,7 @@ python
 >>> exit()
 This creates the necessary User and Url tables in the SQLite database.
 
-4. Google OAuth Setup
+### 4. Google OAuth Setup
 To use Google OAuth:
 
 Visit https://console.cloud.google.com/
@@ -97,7 +96,7 @@ google_bp = make_google_blueprint(
     client_secret="YOUR_CLIENT_SECRET",
     ...
 )
-5. Run the App
+### 5. Run the App
 If you're on Replit: it runs automatically when you hit "Run".
 
 Locally:
@@ -106,7 +105,7 @@ bash
 Copy
 Edit
 python main.py
-📌 Features
+### 📌 Features
 🔐 Google OAuth + optional signup/login
 
 🔗 URL shortening with optional custom alias + expiry

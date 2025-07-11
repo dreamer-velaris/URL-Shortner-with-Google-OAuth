@@ -21,7 +21,7 @@ def login_required(f):
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '0'
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)  # ✅ Move here
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)  
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -47,11 +47,11 @@ app.register_blueprint(google_bp, url_prefix="/login")
 def generate_short_id(user_id, num_chars=6):
     while True:
         short_id = ''.join(random.choices(string.ascii_letters + string.digits, k=num_chars))
-        # Check if this short_id already exists globally
+        
         if not Url.query.filter_by(short_id=short_id, user_id=user_id).first():
 
             return short_id
-        # If it exists, try again with a longer ID
+        
         num_chars += 1
 
 @app.route("/google-login")
@@ -67,10 +67,9 @@ def google_login():
     if not email:
         return "Email not available or permission not granted", 400
 
-    # Check if user exists
     user = User.query.filter_by(username=email).first()
     if not user:
-        user = User(username=email, password="")  # password blank for OAuth
+        user = User(username=email, password="")  
         db.session.add(user)
         db.session.commit()
 
