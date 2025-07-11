@@ -28,7 +28,7 @@ Users can:
 - **Python (Flask)**
 - **SQLite** – lightweight backend database
 - **Fla** – handles Google OAuth
-- **Jinja2** – for templating
+- *sk-Dance*Jinja2** – for templating
 - Hosted and tested using **Replit**
 
 ---
@@ -54,14 +54,11 @@ If you're using Replit, it should auto-install based on requirements.txt.
 
 If running locally:
 
-bash
-Copy
-Edit
+```bash
 pip install -r requirements.txt
+```
 ### 3. Set Up the Database
-bash
-Copy
-Edit
+```bash
 python
 >>> from models import db
 >>> from main import app
@@ -69,6 +66,7 @@ python
 ...     db.create_all()
 ... 
 >>> exit()
+```
 This creates the necessary User and Url tables in the SQLite database.
 
 ### 4. Google OAuth Setup
@@ -82,29 +80,29 @@ Create OAuth client ID for a Web Application
 
 Authorized redirect URI:
 
-php-template
-Copy
-Edit
+```bash
 https://<your-repl-username>.<your-repl-name>.repl.co/login/google/authorized
+```
 Copy the Client ID and Client Secret into main.py:
 
+```bash
 python
-Copy
-Edit
 google_bp = make_google_blueprint(
     client_id="YOUR_CLIENT_ID",
     client_secret="YOUR_CLIENT_SECRET",
     ...
 )
+```
+
 ### 5. Run the App
 If you're on Replit: it runs automatically when you hit "Run".
 
 Locally:
 
-bash
-Copy
-Edit
+```bash
 python main.py
+```
+
 ### 📌 Features
 🔐 Google OAuth + optional signup/login
 
