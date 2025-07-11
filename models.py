@@ -15,8 +15,10 @@ class Url(db.Model):
     clicks = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, nullable=False)
     expires_at = db.Column(db.DateTime, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    __table_args__ = (
+        db.UniqueConstraint('short_id', 'user_id', name='unique_alias_per_user'),
+    )
 
-    __table_args__ = (db.UniqueConstraint('short_id', 'user_id', name='unique_alias_per_user'),)
 
