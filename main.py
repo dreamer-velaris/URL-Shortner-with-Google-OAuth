@@ -23,8 +23,8 @@ db.init_app(app)
 def generate_short_id(user_id, num_chars=6):
     while True:
         short_id = ''.join(random.choices(string.ascii_letters + string.digits, k=num_chars))
-        # Check if this short_id already exists for this user
-        if not Url.query.filter_by(short_id=short_id, user_id=user_id).first():
+        # Check if this short_id already exists globally
+        if not Url.query.filter_by(short_id=short_id).first():
             return short_id
         # If it exists, try again with a longer ID
         num_chars += 1
@@ -41,7 +41,7 @@ def home():
         expiry_date = request.form.get('expiry_date')
 
         if custom_alias:
-            exists = Url.query.filter_by(short_id=custom_alias, user_id=user_id).first()
+            exists = Url.query.filter_by(short_id=custom_alias).first()
 
             if exists:
                 return "Custom alias already taken!", 400
